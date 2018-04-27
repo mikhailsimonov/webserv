@@ -2,7 +2,7 @@ package app;
 
 public class ChatBotMessage {
 
-    private long id;
+    private Long id;
     private Long conversation_id;
     private String text;
     private Long message_type;
@@ -20,7 +20,7 @@ public class ChatBotMessage {
         this.text = text;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -44,7 +44,7 @@ public class ChatBotMessage {
         this.text = text;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 }
