@@ -1,11 +1,9 @@
 package app;
 
+import com.jcraft.jsch.JSchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -13,6 +11,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
+
+import static utils.Parser.getAnswer;
+import static utils.Parser.getRequest;
+import static utils.Ssh.getTestData;
 
 @RestController
 public class MessageController {
@@ -58,6 +60,53 @@ public class MessageController {
         else {
             return new ResponseEntity("FORMAT ENCODING: FAIL!", HttpStatus.CONFLICT);
         }
+    }
+
+    @RequestMapping(value = "/chatbot/getanswer", method = RequestMethod.GET)
+    public String getAns(@RequestParam ("login") String login,
+                              @RequestParam ("url") String url,
+                              @RequestParam ("password") String password) {
+
+        if (login.isEmpty()){
+            return ("LOGIN IS EMPTY!");
+        }else if(url.isEmpty()){
+            return ("URL IS EMPTY!");
+        }else if(password.isEmpty()){
+            return ("PASSWORD IS EMPTY!");
+        }
+
+        try {
+            getTestData(login, url, password,
+                    "/ai/configs/sb900-external=configs/workdata/original_files/faq",
+                    "/src/main/resources/files/К какому оператору сотовой связи можно подключить МБ.json");
+        } catch (JSchException e) {
+            e.printStackTrace();
+        }
+
+        return getAnswer();
+    }
+    @RequestMapping(value = "/chatbot/getrequest", method = RequestMethod.GET)
+    public String getReq(@RequestParam ("login") String login,
+                              @RequestParam ("url") String url,
+                              @RequestParam ("password") String password) {
+
+        if (login.isEmpty()){
+            return ("LOGIN IS EMPTY!");
+        }else if(url.isEmpty()){
+            return ("URL IS EMPTY!");
+        }else if(password.isEmpty()){
+            return ("PASSWORD IS EMPTY!");
+        }
+
+        try {
+            getTestData(login, url, password,
+                    "/ai/configs/sb900-external=configs/workdata/original_files/faq",
+                    "/src/main/resources/files/К какому оператору сотовой связи можно подключить МБ.json");
+        } catch (JSchException e) {
+            e.printStackTrace();
+        }
+
+        return getRequest();
     }
 }
 
